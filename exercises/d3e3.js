@@ -1,15 +1,22 @@
 // https://tech-docs.corndel.com/express/sending-errors.html
-import express, { Router } from 'express'
-import { Account } from './d3e2.js' // <-- uses Account from Exercise 2
+import express, { Router } from "express";
+import { Account } from "./d3e2.js"; // <-- uses Account from Exercise 2
 
-const app = express()
-app.use(express.json())
+const app = express();
+app.use(express.json());
 
-const router = Router()
+const router = Router();
 
-const account = new Account('legolas', 'legolas@thefellowship.com', 'elf4life')
+const account = new Account("legolas", "legolas@thefellowship.com", "elf4life");
 
-router.put('/username', (req, res) => {
+router.put("/username", (req, res, next) => {
+  try {
+    const { newUsername, password } = req.body;
+    account.updateUsername(newUsername, password);
+    res.json({ username: account.username });
+  } catch (error) {
+    res.status(error.code || 500).json({ message: error.message });
+  }
   /**
    * Use try/catch to attempt account.updateUsername with the newUsername and
    * password found in the req.body.
@@ -20,8 +27,8 @@ router.put('/username', (req, res) => {
    * In case this fails, set the status of the response to the error code
    * and send a useful message.
    */
-})
+});
 
-app.use('/account', router)
+app.use("/account", router);
 
-export default app
+export default app;

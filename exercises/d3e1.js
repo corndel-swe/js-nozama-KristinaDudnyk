@@ -1,8 +1,8 @@
-import express, { Router } from 'express'
+import express, { Router } from "express";
 
-const app = express()
-app.use(express.json())
-const router = Router()
+const app = express();
+app.use(express.json());
+const router = Router();
 
 /**
  * Hint: Look at app.use() at the bottom of the file -
@@ -10,19 +10,26 @@ const router = Router()
  */
 
 let state = {
-  count: 0
-}
-
+  count: 0,
+};
+router.get("/", async (req, res) => {
+  res.json(state);
+});
 /**
  * Add a GET /counter endpoint
  * It should simply res.json(state)
  */
+
+router.put("/increment", async (req, res) => {
+  state.count += 1;
+  res.json(state);
+});
 
 /**
  * Add a PUT /counter/increment endpoint
  * It should increase the counter by 1 and then res.json(state)
  */
 
-app.use('/counter', router)
+app.use("/counter", router);
 
-export default app
+export default app;
